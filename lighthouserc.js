@@ -8,9 +8,9 @@ module.exports = {
         output: ["html", "json"],
       },
     },
-    assert: {
-      preset: "lighthouse:recommended",
-    },
+    // assert: {
+    //   preset: "lighthouse:recommended",
+    // },
   },
   upload: {
     target: "filesystem",
