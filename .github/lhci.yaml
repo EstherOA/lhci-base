@@ -1,0 +1,54 @@
+name: Lighthouse CI
+on:
+  pull_request:
+    branches:
+      - main 
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18.x
+      - name: npm install, build
+        run: |
+          npm install
+          npm build
+      - name: run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.15.x
+          lhci autorun
+      - name: Upload Lighthouse HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lhcr-results
+          retention-days: 7
+      - name: Extract Lighthouse scores
+        id: lighthouse-scores
+        run: |
+          REPORT_FILE=$(ls ./lhcr-results/*.json | head -n 1)
+          PERFORMANCE==$(jq '.categories.performance.score * 100' "$REPORT_FILE")
+          ACCESSIBILITY==$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
+          BEST_PRACTICES==$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
+          SEO==$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+
+          echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
+          echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
+          echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
+          echo "seo=${SEO}" >> $GITHUB_OUTPUT
+        - name: Comment on PR with Lighthouse scores
+        uses: marocchino/sticky-pull-request-comment@v2
+        with: 
+          header: lighthouse-report
+          message: |
+            ## Lighthouse report
+            **Performance**: ${{ steps.lighthouse-scores.outputs.performance}}
+            **Accessibility**: ${{ steps.lighthouse-scores.outputs.accessibility}}
+            **Best Practices**: ${{ steps.lighthouse-scores.outputs.best_practices}}
+            **SEO**: ${{ steps.lighthouse-scores.outputs.seo}}
+
+            [View full HTML report (artifact)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
