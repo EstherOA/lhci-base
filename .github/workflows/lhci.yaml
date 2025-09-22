@@ -30,7 +30,7 @@ jobs:
       - name: Extract Lighthouse scores
         id: lighthouse-scores
         run: |
-          REPORT_FILE=$(ls ./lhcr-results/*.json | head -n 1)
+          REPORT_FILE=$(ls lhcr-results/*.json | head -n 1)
           PERFORMANCE==$(jq '.categories.performance.score * 100' "$REPORT_FILE")
           ACCESSIBILITY==$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
           BEST_PRACTICES==$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
