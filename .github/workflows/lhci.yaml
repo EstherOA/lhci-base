@@ -1,6 +1,6 @@
 name: Lighthouse CI
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
 jobs:
@@ -40,8 +40,10 @@ jobs:
           echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
           echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
           echo "seo=${SEO}" >> $GITHUB_OUTPUT
-      - name: Comment on PR with Lighthouse scores
+      - name: Post Lighthouse summary
         uses: marocchino/sticky-pull-request-comment@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           header: lighthouse-report
           message: |
