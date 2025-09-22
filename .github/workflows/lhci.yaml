@@ -23,7 +23,7 @@ jobs:
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
-          lhci autorun --config=./.lighthouserc.js
+          lhci autorun --config=./lighthouserc.js
       - name: Upload Lighthouse HTML report
         uses: actions/upload-artifact@v4
         with:
