@@ -24,7 +24,7 @@ module.exports = {
   },
   upload: {
     target: "filesystem",
-    outputDir: ".lighthouseci", // ensures files are saved here
+    outputDir: "lhci-report", // ensures files are saved here
     reportFilenamePattern: "report-%%DATETIME%%.%%EXTENSION%%",
   },
 };
