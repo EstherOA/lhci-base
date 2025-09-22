@@ -24,6 +24,5 @@ module.exports = {
   },
   upload: {
     target: "filesystem",
-    outputDir: "./lhcr-results",
   },
 };

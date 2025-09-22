@@ -25,12 +25,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report
-          path: lhcr-results
+          path: .lighthouseci
           retention-days: 7
       - name: Extract Lighthouse scores
         id: lighthouse-scores
         run: |
-          REPORT_FILE=$(ls lhcr-results/*.json | head -n 1)
+          REPORT_FILE=$(ls .lighthouseci/*.json | head -n 1)
           PERFORMANCE==$(jq '.categories.performance.score * 100' "$REPORT_FILE")
           ACCESSIBILITY==$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
           BEST_PRACTICES==$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
