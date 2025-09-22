@@ -2,7 +2,7 @@ module.exports = {
   ci: {
     collect: {
       url: ["http://localhost:3000/"],
-      startServerCommand: "npm start",
+      startServerCommand: "npm run start",
       numberOfRuns: 3,
       settings: {
         output: ["html", "json"],
@@ -24,5 +24,7 @@ module.exports = {
   },
   upload: {
     target: "filesystem",
+    outputDir: ".lighthouseci", // ensures files are saved here
+    reportFilenamePattern: "report-%%DATETIME%%.%%EXTENSION%%",
   },
 };
