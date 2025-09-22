@@ -37,7 +37,7 @@ jobs:
           PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
           ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
           BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
-          SEO==$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+          SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
 
           echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
           echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
