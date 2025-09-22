@@ -14,7 +14,12 @@ module.exports = {
       //   "categories:performance": ["error", { "minScore": 0.9 }],
       //   "categories:accessibility": ["warn", { "minScore": 0.95 }]
       // }
-      assertions: {},
+      assertions: {
+        "categories:performance": ["warn"],
+        "categories:accessibility": ["warn"],
+        "categories:best-practices": ["warn"],
+        "categories:seo": ["warn"],
+      },
     },
   },
   upload: {
