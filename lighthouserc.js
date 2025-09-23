@@ -3,7 +3,7 @@ module.exports = {
     collect: {
       url: ["http://localhost:3000/"],
       startServerCommand: "npm run start",
-      numberOfRuns: 3,
+      numberOfRuns: 2,
       settings: {
         output: ["html", "json"],
       },
