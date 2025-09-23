@@ -1,0 +1,100 @@
+name: Lighthouse CI
+on:
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build
+
+      - name: run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.15.x
+          lhci autorun --config=./lighthouserc.js
+
+      - name: Upload Lighthouse HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lhci-report
+          retention-days: 7
+
+      - name: Extract Lighthouse scores
+        id: lighthouse-scores
+        run: |
+          echo "Contents of lhci-report directory (for debugging):"
+           ls -al lhci-report || echo "Directory lhci-report does not exist"
+
+           # safer globbing (no literal *.json if no files exist)
+           shopt -s nullglob
+           files=(lhci-report/*.json)
+           shopt -u nullglob
+
+           if [ ${#files[@]} -gt 0 ]; then
+             REPORT_FILE="${files[0]}"
+             echo "Using report file: $REPORT_FILE"
+
+             PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
+             ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
+             BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
+             SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+
+             echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
+             echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
+             echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
+             echo "seo=${SEO}" >> $GITHUB_OUTPUT
+           else
+             echo "No Lighthouse JSON report found, skipping score extraction."
+           fi
+
+      - name: Set badge colors
+        id: badge-colors
+        run: |
+          get_color() {
+            local score=$1
+            if [ "$score" -ge 90 ]; then
+              echo "brightgreen"
+            elif [ "$score" -ge 50 ]; then
+              echo "yellow"
+            else
+              echo "red"
+            fi
+          }
+
+          echo "performance_color=$(get_color ${{ steps.lighthouse-scores.outputs.performance }})" >> $GITHUB_OUTPUT
+          echo "accessibility_color=$(get_color ${{ steps.lighthouse-scores.outputs.accessibility }})" >> $GITHUB_OUTPUT
+          echo "best_practices_color=$(get_color ${{ steps.lighthouse-scores.outputs.best_practices }})" >> $GITHUB_OUTPUT
+          echo "seo_color=$(get_color ${{ steps.lighthouse-scores.outputs.seo }})" >> $GITHUB_OUTPUT
+      - name: Post Lighthouse summary
+        uses: marocchino/sticky-pull-request-comment@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          header: lighthouse-report
+          message: |
+            ## 📊 Lighthouse Report
+
+            | Category        | Score |
+            |-----------------|-------|
+            | ⚡ **Performance**   | ![Performance](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.performance }}-${{ steps.badge-colors.outputs.performance_color }}?style=flat&logo=lighthouse) |
+            | ♿ **Accessibility** | ![Accessibility](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.accessibility }}-${{ steps.badge-colors.outputs.accessibility_color }}?style=flat&logo=lighthouse) |
+            | 🔒 **Best Practices** | ![Best Practices](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.best_practices }}-${{ steps.badge-colors.outputs.best_practices_color }}?style=flat&logo=lighthouse) |
+            | 🌐 **SEO**          | ![SEO](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.seo }}-${{ steps.badge-colors.outputs.seo_color }}?style=flat&logo=lighthouse) |
+
+            🔗 [View full HTML report (artifact)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
