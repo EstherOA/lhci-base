@@ -33,26 +33,30 @@ jobs:
       - name: Extract Lighthouse scores
         id: lighthouse-scores
         run: |
-          REPORT_FILE=$(ls lhci-report/lhr-*.json | head -n 1)
+          echo "Contents of lhci-report directory (for debugging):"
+           ls -al lhci-report || echo "Directory lhci-report does not exist"
 
-          if [ -z "$REPORT_FILE" ]; then
-            echo "⚠️ No Lighthouse JSON report found. Skipping score extraction."
-            echo "performance=0" >> $GITHUB_OUTPUT
-            echo "accessibility=0" >> $GITHUB_OUTPUT
-            echo "best_practices=0" >> $GITHUB_OUTPUT
-            echo "seo=0" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+           # safer globbing (no literal *.json if no files exist)
+           shopt -s nullglob
+           files=(lhci-report/*.json)
+           shopt -u nullglob
 
-          PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
-          ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
-          BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
-          SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+           if [ ${#files[@]} -gt 0 ]; then
+             REPORT_FILE="${files[0]}"
+             echo "Using report file: $REPORT_FILE"
 
-          echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
-          echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
-          echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
-          echo "seo=${SEO}" >> $GITHUB_OUTPUT
+             PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
+             ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
+             BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
+             SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+
+             echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
+             echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
+             echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
+             echo "seo=${SEO}" >> $GITHUB_OUTPUT
+           else
+             echo "No Lighthouse JSON report found, skipping score extraction."
+           fi
       - name: Post Lighthouse summary
         uses: marocchino/sticky-pull-request-comment@v2
         env:
