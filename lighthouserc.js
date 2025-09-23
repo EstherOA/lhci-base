@@ -21,10 +21,10 @@ module.exports = {
         "categories:seo": ["warn"],
       },
     },
-  },
-  upload: {
-    target: "filesystem",
-    outputDir: "lhci-report", // ensures files are saved here
-    reportFilenamePattern: "report-%%DATETIME%%.%%EXTENSION%%",
+    upload: {
+      target: "filesystem",
+      outputDir: "lhci-report", // ensures files are saved here
+      reportFilenamePattern: "report-%%DATETIME%%.%%EXTENSION%%",
+    },
   },
 };
