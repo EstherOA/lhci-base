@@ -34,6 +34,16 @@ jobs:
         id: lighthouse-scores
         run: |
           REPORT_FILE=$(ls lhci-report/lhr-*.json | head -n 1)
+
+          if [ -z "$REPORT_FILE" ]; then
+            echo "⚠️ No Lighthouse JSON report found. Skipping score extraction."
+            echo "performance=0" >> $GITHUB_OUTPUT
+            echo "accessibility=0" >> $GITHUB_OUTPUT
+            echo "best_practices=0" >> $GITHUB_OUTPUT
+            echo "seo=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
           ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
           BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")

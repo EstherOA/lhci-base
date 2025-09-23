@@ -24,7 +24,6 @@ module.exports = {
     upload: {
       target: "filesystem",
       outputDir: "lhci-report", // ensures files are saved here
-      reportFilenamePattern: "report-%%DATETIME%%.%%EXTENSION%%",
     },
   },
 };
