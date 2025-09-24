@@ -30,6 +30,9 @@ jobs:
           npm install
           npm run build
 
+      - name: Run Build Urls script
+        run: node scripts/build-lhci-urls.js
+
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
