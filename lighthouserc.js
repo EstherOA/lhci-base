@@ -1,7 +1,9 @@
+import fs from "fs";
+
 module.exports = {
   ci: {
     collect: {
-      url: ["http://localhost:3000/"],
+      url: fs.readFileSync("lhci-urls.json", "utf-8"),
       startServerCommand: "npm run start",
       numberOfRuns: 3,
       settings: {
