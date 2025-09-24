@@ -18,7 +18,13 @@ jobs:
     name: Lighthouse
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch for comparison
+        run: git fetch origin main
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -31,9 +37,7 @@ jobs:
           npm run build
 
       - name: Run Build Urls script
-        run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
-          node scripts/build-lhci-urls.js
+        run: node scripts/build-lhci-urls.js
 
       - name: run Lighthouse CI
         run: |
