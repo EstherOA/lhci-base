@@ -43,6 +43,8 @@ jobs:
 
       - name: Stop if no URLS
         if: steps.build_urls.conclusion == 'neutral'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "⚠️ No URLs detected. Skipping Lighthouse job."
           exit 0
