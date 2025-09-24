@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
 const appDir = path.join(process.cwd(), "src/app"); //Use pages if using Pages Router
 
