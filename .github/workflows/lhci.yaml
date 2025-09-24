@@ -14,9 +14,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  lhci:
-    name: Lighthouse
+  gen-urls:
     runs-on: ubuntu-latest
+    outputs:
+      urls_found: ${{ steps.check_urls.outputs.urls_found }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,13 +43,23 @@ jobs:
         continue-on-error: true
 
       - name: Stop if no URLS
-        if: steps.build_urls.conclusion == 'neutral'
+        id: check_urls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if [ "$(cat lhci-urls.json)" = "[]" ]; then
+            echo "urls_found=false" >> $GITHUB_OUTPUT
+          else
+            echo "urls_found=true" >> $GITHUB_OUTPUT
+          fi
           echo "⚠️ No URLs detected. Skipping Lighthouse job."
-          exit 0
 
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    needs: gen-urls
+    if: needs.gen-urls.outputs.urls_found == 'true'
+    steps:
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
@@ -108,6 +119,7 @@ jobs:
           echo "accessibility_color=$(get_color ${{ steps.lighthouse-scores.outputs.accessibility }})" >> $GITHUB_OUTPUT
           echo "best_practices_color=$(get_color ${{ steps.lighthouse-scores.outputs.best_practices }})" >> $GITHUB_OUTPUT
           echo "seo_color=$(get_color ${{ steps.lighthouse-scores.outputs.seo }})" >> $GITHUB_OUTPUT
+
       - name: Post Lighthouse summary
         uses: marocchino/sticky-pull-request-comment@v2
         env:
