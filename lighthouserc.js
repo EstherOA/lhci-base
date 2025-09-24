@@ -1,7 +1,11 @@
+const fs = require("fs");
+
+const urlList = JSON.parse(fs.readFileSync("lhci-urls.json", "utf-8"));
+
 module.exports = {
   ci: {
     collect: {
-      url: ["http://localhost:3000/"],
+      url: urlList,
       startServerCommand: "npm run start",
       numberOfRuns: 3,
       settings: {
