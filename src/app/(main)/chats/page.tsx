@@ -1,7 +1,7 @@
 export default function Page() {
   return (
     <div>
-      <p>All Chats List</p>
+      <p>All User Chats List</p>
     </div>
   );
 }
