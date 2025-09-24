@@ -31,7 +31,9 @@ jobs:
           npm run build
 
       - name: Run Build Urls script
-        run: node scripts/build-lhci-urls.js
+        run: |
+          git fetch orign ${{ github.event.pull_request.base.ref }}
+          node scripts/build-lhci-urls.js
 
       - name: run Lighthouse CI
         run: |
