@@ -18,7 +18,13 @@ jobs:
     name: Lighthouse
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch for comparison
+        run: git fetch origin main
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -29,6 +35,17 @@ jobs:
         run: |
           npm install
           npm run build
+
+      - name: Run Build Urls script
+        id: build_urls
+        run: node scripts/build-lhci-urls.js
+        continue-on-error: true
+
+      - name: Stop if no URLS
+        if: steps.build_urls.conclusion == 'neutral'
+        run: |
+          echo "⚠️ No URLs detected. Skipping Lighthouse job."
+          exit 0
 
       - name: run Lighthouse CI
         run: |
@@ -53,22 +70,23 @@ jobs:
            files=(lhci-report/*.json)
            shopt -u nullglob
 
-           if [ ${#files[@]} -gt 0 ]; then
-             REPORT_FILE="${files[0]}"
-             echo "Using report file: $REPORT_FILE"
+            if [ ${#files[@]} -gt 0 ]; then
+              REPORT_FILE="${files[0]}"
+              echo "Using report file: $REPORT_FILE"
 
-             PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
-             ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
-             BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
-             SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
+              PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
+              ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
+              BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
+              SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
 
-             echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
-             echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
-             echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
-             echo "seo=${SEO}" >> $GITHUB_OUTPUT
-           else
-             echo "No Lighthouse JSON report found, skipping score extraction."
-           fi
+
+              echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
+              echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
+              echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
+              echo "seo=${SEO}" >> $GITHUB_OUTPUT
+            else
+              echo "No Lighthouse JSON report found, skipping score extraction."
+            fi
 
       - name: Set badge colors
         id: badge-colors
