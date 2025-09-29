@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -54,9 +54,8 @@ jobs:
 
       - name: Deploy Lighthouse reports to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./lhci-report
           destination_dir: pr-${{ github.event.pull_request.number }}
 
