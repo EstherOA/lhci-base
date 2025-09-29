@@ -1,11 +1,9 @@
-const fs = require("fs");
-
-const urlList = JSON.parse(fs.readFileSync("lhci-urls.json", "utf-8"));
+const { getUrlsFromJson } = require("./scripts/validate-urls");
 
 module.exports = {
   ci: {
     collect: {
-      url: urlList,
+      url: getUrlsFromJson(),
       startServerCommand: "npm run start",
       numberOfRuns: 3,
       settings: {
@@ -23,6 +21,7 @@ module.exports = {
     upload: {
       target: "filesystem",
       outputDir: "lhci-report", // ensures files are saved here
+      reportFilenamePattern: "%%PATHNAME%%.%%EXTENSION%%",
     },
   },
 };

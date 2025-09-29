@@ -2,30 +2,27 @@ name: Lighthouse CI
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
-  gen-urls:
-    runs-on: ubuntu-latest
-    outputs:
-      urls_found: ${{ steps.check_urls.outputs.urls_found }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  validate:
+    name: Validate
+    uses: ./.github/workflows/validate-urls.yaml
 
-      - name: Fetch main branch for comparison
-        run: git fetch origin main
+  lhci:
+    name: Lighthouse
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -37,33 +34,16 @@ jobs:
           npm install
           npm run build
 
-      - name: Run Build Urls script
-        id: build_urls
-        run: node scripts/build-lhci-urls.js
-        continue-on-error: true
-
-      - name: Stop if no URLS
-        id: check_urls
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ "$(cat lhci-urls.json)" = "[]" ]; then
-            echo "urls_found=false" >> $GITHUB_OUTPUT
-          else
-            echo "urls_found=true" >> $GITHUB_OUTPUT
-          fi
-          echo "⚠️ No URLs detected. Skipping Lighthouse job."
-
-  lhci:
-    name: Lighthouse
-    runs-on: ubuntu-latest
-    needs: gen-urls
-    if: needs.gen-urls.outputs.urls_found == 'true'
-    steps:
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.15.x
           lhci autorun --config=./lighthouserc.js
+
+      - name: Rename root report to index.html
+        run: |
+          if [ -f lhci-report/.html ]; then
+            mv lhci-report/.html lhci-report/index.html
+          fi
 
       - name: Upload Lighthouse HTML report
         uses: actions/upload-artifact@v4
@@ -71,6 +51,13 @@ jobs:
           name: lighthouse-report
           path: lhci-report
           retention-days: 7
+
+      - name: Deploy Lighthouse reports to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./lhci-report
+          destination_dir: pr-${{ github.event.pull_request.number }}
 
       - name: Extract Lighthouse scores
         id: lighthouse-scores
@@ -83,23 +70,22 @@ jobs:
            files=(lhci-report/*.json)
            shopt -u nullglob
 
-            if [ ${#files[@]} -gt 0 ]; then
-              REPORT_FILE="${files[0]}"
-              echo "Using report file: $REPORT_FILE"
+           if [ ${#files[@]} -gt 0 ]; then
+             REPORT_FILE="${files[0]}"
+             echo "Using report file: $REPORT_FILE"
 
-              PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
-              ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
-              BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
-              SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE" | xargs printf "%.2f" | sed 's/\.00$//')
+             PERFORMANCE=$(jq '.categories.performance.score * 100' "$REPORT_FILE")
+             ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' "$REPORT_FILE")
+             BEST_PRACTICES=$(jq '.categories["best-practices"].score * 100' "$REPORT_FILE")
+             SEO=$(jq '.categories.seo.score * 100' "$REPORT_FILE")
 
-
-              echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
-              echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
-              echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
-              echo "seo=${SEO}" >> $GITHUB_OUTPUT
-            else
-              echo "No Lighthouse JSON report found, skipping score extraction."
-            fi
+             echo "performance=${PERFORMANCE}" >> $GITHUB_OUTPUT
+             echo "accessibility=${ACCESSIBILITY}" >> $GITHUB_OUTPUT
+             echo "best_practices=${BEST_PRACTICES}" >> $GITHUB_OUTPUT
+             echo "seo=${SEO}" >> $GITHUB_OUTPUT
+           else
+             echo "No Lighthouse JSON report found, skipping score extraction."
+           fi
 
       - name: Set badge colors
         id: badge-colors
@@ -119,7 +105,6 @@ jobs:
           echo "accessibility_color=$(get_color ${{ steps.lighthouse-scores.outputs.accessibility }})" >> $GITHUB_OUTPUT
           echo "best_practices_color=$(get_color ${{ steps.lighthouse-scores.outputs.best_practices }})" >> $GITHUB_OUTPUT
           echo "seo_color=$(get_color ${{ steps.lighthouse-scores.outputs.seo }})" >> $GITHUB_OUTPUT
-
       - name: Post Lighthouse summary
         uses: marocchino/sticky-pull-request-comment@v2
         env:
@@ -136,4 +121,4 @@ jobs:
             | 🔒 **Best Practices** | ![Best Practices](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.best_practices }}-${{ steps.badge-colors.outputs.best_practices_color }}?style=flat&logo=lighthouse) |
             | 🌐 **SEO**          | ![SEO](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.seo }}-${{ steps.badge-colors.outputs.seo_color }}?style=flat&logo=lighthouse) |
 
-            🔗 [View full HTML report (artifact)](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            🔗 [View full HTML report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/)

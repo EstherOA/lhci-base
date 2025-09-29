@@ -1,0 +1,25 @@
+name: Validate URLs
+
+on:
+  workflow_call:
+    outputs:
+      urls-ok:
+        description: "Did URL validation pass?"
+        value: ${{ jobs.validate-urls.outputs.result }}
+
+jobs:
+  validate-urls:
+    outputs:
+      result: ${{ steps.validate.outcome }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        continue-on-error: true
+      - name: Run URL validation script
+        id: validate
+        run: |
+          node scripts/validate-urls.js
+      # - run: echo "✅ Validation passed"
+      #   if: ${{ success() }}
+      # - run: echo "❌ Validation failed"
+      #   if: ${{ failure() }}

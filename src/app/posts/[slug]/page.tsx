@@ -13,10 +13,6 @@ export default async function Post(props: Params) {
   const params = await props.params;
   const post = getPostBySlug(params.slug);
 
-  if (!post) {
-    return notFound();
-  }
-
   const content = await markdownToHtml(post.content || "");
 
   return (
