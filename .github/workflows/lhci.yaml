@@ -121,4 +121,4 @@ jobs:
             | 🔒 **Best Practices** | ![Best Practices](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.best_practices }}-${{ steps.badge-colors.outputs.best_practices_color }}?style=flat&logo=lighthouse) |
             | 🌐 **SEO**          | ![SEO](https://img.shields.io/badge/${{ steps.lighthouse-scores.outputs.seo }}-${{ steps.badge-colors.outputs.seo_color }}?style=flat&logo=lighthouse) |
 
-            🔗 [View full HTML reportView Report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/)
+            🔗 [View full HTML report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/)
