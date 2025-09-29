@@ -9,5 +9,5 @@
     "archived": ["http://localhost:3000/chats/123/archive/21"],
     "all": ["http://localhost:3000/chats", "http://localhost:3000/chats/123"]
   },
-  "posts": ["http://localhost:3000/posts/q3rasd"]
+  "posts": ["http://localhost:3000/posts/preview"]
 }
