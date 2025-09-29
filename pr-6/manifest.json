@@ -1,0 +1,254 @@
+[
+  {
+    "url": "http://localhost:3000/",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.json",
+    "summary": {
+      "performance": 0.77,
+      "accessibility": 0.92,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.json",
+    "summary": {
+      "performance": 0.98,
+      "accessibility": 0.92,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user/settings",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user/settings",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123/archive/21",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123/archive/21",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/posts/preview",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 0.94,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/posts/preview",
+    "isRepresentativeRun": false,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 0.94,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/.json",
+    "summary": {
+      "performance": 0.98,
+      "accessibility": 0.92,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/user/settings",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/user_settings.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123/archive/21",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123_archive_21.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/chats/123",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/chats_123.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 0.93,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:3000/posts/preview",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.html",
+    "jsonPath": "/home/runner/work/lhci-base/lhci-base/lhci-report/posts_preview.json",
+    "summary": {
+      "performance": 0.99,
+      "accessibility": 0.94,
+      "best-practices": 1,
+      "seo": 1
+    }
+  }
+]
