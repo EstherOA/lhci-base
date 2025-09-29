@@ -1,6 +1,9 @@
-[
-  "http://localhost:3000/chats",
-  "http://localhost:3000/",
-  "http://localhost:3000/user",
-  "http://localhost:3000/user/settings"
-]
+{
+  "homepage": "http://localhost:3000/",
+  "user": [
+    "http://localhost:3000/user",
+    "http://localhost:3000/user/settings"
+  ],
+  "chats": ["http://localhost:3000/chats", "http://localhost:3000/chats/123"],
+  "posts": ["http://localhost:3000/posts/q3rasd"]
+}

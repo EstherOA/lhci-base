@@ -1,9 +1,9 @@
 name: Lighthouse CI
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Validate URLs"]
+    types: [completed]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   lhci:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Lighthouse
     runs-on: ubuntu-latest
     steps:
@@ -34,6 +35,12 @@ jobs:
         run: |
           npm install -g @lhci/cli@0.15.x
           lhci autorun --config=./lighthouserc.js
+
+      - name: Rename root report to index.html
+        run: |
+          if [ -f lhci-report/.html ]; then
+            mv lhci-report/.html lhci-report/index.html
+          fi
 
       - name: Upload Lighthouse HTML report
         uses: actions/upload-artifact@v4

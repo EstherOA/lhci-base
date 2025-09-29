@@ -1,0 +1,17 @@
+name: Validate URLs
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-urls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Run URL validation script
+        run: |
+          node scripts/validate-urls.js
+          echo "✅ Validation passed"
