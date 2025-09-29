@@ -47,6 +47,7 @@ function validateUrlJson(dir, parentRoute = "") {
       const foundDynamic = urlList.some((u) => dynamicUrlRegex.test(u));
 
       if (!foundExact && !foundDynamic) {
+        console.log(`${fullUrl} not found in Urls json file!`);
         process.exit(1);
       }
     }

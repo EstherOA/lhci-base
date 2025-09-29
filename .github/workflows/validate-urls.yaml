@@ -18,4 +18,7 @@ jobs:
         id: validate
         run: |
           node scripts/validate-urls.js
-          echo "✅ Validation passed"
+      - run: echo "✅ Validation passed"
+        if: ${{ success() }}
+      - run: echo "❌ Validation failed"
+        if: ${{ failure() }}
