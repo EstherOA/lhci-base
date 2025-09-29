@@ -1,9 +1,8 @@
 name: Lighthouse CI
 
 on:
-  workflow_run:
-    workflows: ["Validate URLs"]
-    types: [completed]
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,8 +13,12 @@ permissions:
   pull-requests: write
 
 jobs:
+  validate:
+    uses: ./.github/workflows/validate-urls.yaml
+
   lhci:
     name: Lighthouse
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
